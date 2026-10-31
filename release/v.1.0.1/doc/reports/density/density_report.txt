@@ -1,0 +1,22 @@
+Total Area = 1638400.0um^2
+
+Activ Area = 747987.044um^2
+Activ %    = 45.654% Min = 35 Max = 55
+
+GatPoly Area = 268914.912um^2
+GatPoly %    = 16.413% Min = 15
+
+Metal1 Area = 838125.648um^2
+Metal1 %    = 51.155% Min = 35 Max = 60
+
+Metal2 Area = 692902.289um^2
+Metal2 %    = 42.291% Min = 35 Max = 60
+
+Metal3 Area = 883342.45um^2
+Metal3 %    = 53.915% Min = 35 Max = 60
+
+Metal4 Area = 919378.892um^2
+Metal4 %    = 56.114% Min = 35 Max = 60
+
+TopMetal1 Area = 828199.788um^2
+TopMetal1 %    = 50.549% Min = 25 Max = 77

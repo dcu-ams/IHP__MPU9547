@@ -1,0 +1,185 @@
+meta:
+  version: 3
+  flow: Classic
+  substituting_steps:
+  
+  # All steps are enabled by default
+  # To prevent a step from running delete the hash at the start of the time
+  # The line will move back one space - this is required as the alignment
+  # seems quite particular. If you get a ParseError having uncommented a line
+  # it means its alignment in the column wrt the other values is incorrect
+
+#     Verilator.Lint: null
+#     Checker.LintTimingConstructs: null
+#     Checker.LintErrors: null
+#     Checker.LintWarnings: null
+#     Yosys.JsonHeader: null
+#     Yosys.Synthesis: null
+#     Checker.YosysUnmappedCells: null
+#     Checker.YosysSynthChecks: null
+#     Checker.NetlistAssignStatements: null
+#     OpenROAD.CheckSDCFiles: null
+#     OpenROAD.CheckMacroInstances: null
+#     OpenROAD.STAPrePNR: null
+#     OpenROAD.Floorplan: null
+#     OpenROAD.DumpRCValues: null
+#     Odb.CheckMacroAntennaProperties: null
+#     Odb.SetPowerConnections: null
+#     Odb.ManualMacroPlacement: null
+#     OpenROAD.CutRows: null
+#     OpenROAD.TapEndcapInsertion: null
+#     Odb.AddPDNObstructions: null
+#     OpenROAD.GeneratePDN: null
+#     Odb.RemovePDNObstructions: null
+#     Odb.AddRoutingObstructions: null
+#     OpenROAD.GlobalPlacementSkipIO: null
+#     OpenROAD.IOPlacement: null
+#     Odb.CustomIOPlacement: null
+#     Odb.ApplyDEFTemplate: null
+#     OpenROAD.GlobalPlacement: null
+#     Odb.WriteVerilogHeader: null
+#     Checker.PowerGridViolations: null
+#     OpenROAD.STAMidPNR: null
+#     OpenROAD.RepairDesignPostGPL: null
+#     Odb.ManualGlobalPlacement: null
+#     OpenROAD.DetailedPlacement: null
+#     OpenROAD.CTS: null
+#     OpenROAD.STAMidPNR-1: null
+#     OpenROAD.ResizerTimingPostCTS: null
+#     OpenROAD.STAMidPNR-2: null
+#     OpenROAD.GlobalRouting: null
+#     OpenROAD.CheckAntennas: null
+#     OpenROAD.RepairDesignPostGRT: null
+#     Odb.DiodesOnPorts: null
+#     Odb.HeuristicDiodeInsertion: null
+#     OpenROAD.RepairAntennas: null
+#     OpenROAD.ResizerTimingPostGRT: null
+#     OpenROAD.STAMidPNR-3: null
+#     OpenROAD.DetailedRouting: null
+#     Odb.RemoveRoutingObstructions: null
+#     OpenROAD.CheckAntennas-1: null
+#     Checker.TrDRC: null
+#     Odb.ReportDisconnectedPins: null
+#     Checker.DisconnectedPins: null
+#     Odb.ReportWireLength: null
+#     Checker.WireLength: null
+#     OpenROAD.FillInsertion: null
+#     Odb.CellFrequencyTables: null
+#     OpenROAD.RCX: null
+#     OpenROAD.STAPostPNR: null
+#     OpenROAD.IRDropReport: null
+     Magic.StreamOut: null
+#     KLayout.StreamOut: null
+#     KLayout.Render: null
+     Magic.WriteLEF: null
+     Odb.CheckDesignAntennaProperties: null
+     KLayout.XOR: null
+     Checker.XOR: null
+     Magic.DRC: null
+##     KLayout.DRC: null
+     Checker.MagicDRC: null
+##     Checker.KLayoutDRC: null
+     Magic.SpiceExtraction: null
+     Checker.IllegalOverlap: null
+     Netgen.LVS: null
+     Checker.LVS: null
+#     Yosys.EQY: null
+#     Checker.SetupViolations: null
+#     Checker.HoldViolations: null
+#     Checker.MaxSlewViolations: null
+#     Checker.MaxCapViolations: null
+#     Misc.ReportManufacturability: null
+
+LINTER_INCLUDE_PDK_MODELS: true
+
+
+DESIGN_NAME: tv80s
+VERILOG_FILES:
+- dir::../src/tv80s.v
+- dir::../src/tv80_core.v
+- dir::../src/tv80_alu.v
+- dir::../src/tv80_reg.v
+- dir::../src/tv80_mcode.v
+
+
+VERILOG_DEFINES: [FUNCTIONAL]
+
+# Enable plugin for better SystemVerilog support
+# USE_SLANG: True
+# SLANG_ARGUMENTS: ['--keep-hierarchy']
+
+# Slightly smaller file sizes
+PRIMARY_GDSII_STREAMOUT_TOOL: klayout
+
+# SDC files
+PNR_SDC_FILE: dir::block.sdc
+SIGNOFF_SDC_FILE: dir::block.sdc
+FALLBACK_SDC: dir::block.sdc
+
+# Power / ground nets
+VDD_NETS:
+- VDD
+GND_NETS:
+- VSS
+
+# Clock
+CLOCK_NET: clk
+CLOCK_PORT: clk
+# 50 ns equivalent to 20 MHz
+CLOCK_PERIOD: 50
+
+# Timing - default
+# 
+# Placement (default 0.1 ns) 0.3
+PL_RESIZER_HOLD_SLACK_MARGIN: 0.1
+# Global routing (default 0.05 ns) 0.15
+GRT_RESIZER_HOLD_SLACK_MARGIN: 0.05
+
+
+# Trying to by margin with these settings
+#
+# Set the cap to 0.8 pF to force buf_8 instantiation
+OUTPUT_CAP_LOAD: 800
+# Tighten up on transistion from PDK default of 1.5 to 2 ns  (0.5)
+# MAX_TRANSITION_CONSTRAINT: 0.5
+# Tighten up on transistion from PDK default of 0.15 ns to 0.1 ns
+# Probably overkill for the clock frequencies we are likely to use
+# CLOCK_TRANSITION_CONSTRAINT: 0.1
+
+
+# Floorplanning
+FP_SIZING: absolute
+DIE_AREA: [0, 0, 509, 406]
+CORE_AREA: [5, 5, 504, 401]
+# with PDN_CORE_RING
+#DIE_AREA: [0, 0, 500, 400]
+#CORE_AREA: [50, 50, 450, 350]
+IO_PIN_ORDER_CFG: dir::pins.cfg
+
+# Increase for more logic
+# on your die
+PL_TARGET_DENSITY_PCT: 50
+GRT_ALLOW_CONGESTION: false
+# RT_MAX_LAYER: "Metal4"
+
+# PDN 
+PDN_CFG: dir::pdn_cfg.tcl
+#PDN_CORE_RING: false
+#PDN_CORE_RING_VWIDTH: 1    
+#PDN_CORE_RING_VSPACING: 2
+#PDN_CORE_RING_HWIDTH: 2
+#PDN_CORE_RING_HSPACING: 4
+PDN_HWIDTH: 2
+PDN_HSPACING: 4
+PDN_HPITCH: 55
+PDN_HOFFSET: 0
+PDN_VWIDTH: 1
+PDN_VSPACING: 2
+PDN_VPITCH: 55
+PDN_VOFFSET: 0
+
+
+#PDN_CORE_RING_CONNECT_TO_PADS: false
+#PDN_ENABLE_PINS: true
+
+
